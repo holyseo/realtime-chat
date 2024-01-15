@@ -1,11 +1,14 @@
 import "./index.css";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { UserLoginContext } from "./UserContext";
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
   const [party, setParty] = useState("");
+
+  const { userLogin } = useContext(UserLoginContext);
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -34,7 +37,6 @@ function Chat({ socket, username, room }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log(data.author);
       setParty(data.author);
     });
   }, [socket]);
@@ -43,13 +45,14 @@ function Chat({ socket, username, room }) {
     <div className="flex flex-col items-center bg-cyan-800 h-screen font-mono py-60 ">
       <div className=" flex flex-col gap-3 bg-slate-50 px-3 pt-5 rounded-2xl w-96 ">
         <div className="text-lg text-center font-semibold mb-5">
+          <p className=" pb-3">Welcome, {userLogin}.</p>
           {!party ? (
-            <p>You are the only one in this chat.</p>
+            <p className="text-xs">You are the only one in this chat.</p>
           ) : (
-            <p>Chat with: {party}</p>
+            <p className="text-xs">Chat started with: {party}</p>
           )}
         </div>
-        <ScrollToBottom className=" flex flex-col end overflow-y-auto h-72 border-gray-300 bg-white border-2 shadow-md rounded-md p-2">
+        <ScrollToBottom className=" flex flex-col end overflow-y-auto h-96 border-gray-300 bg-white border-2 shadow-md rounded-md p-2">
           {messageList.map((messageContent, index) =>
             messageContent.author !== username ? (
               <div key={index} className="mr-auto flex flex-col">

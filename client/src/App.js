@@ -1,7 +1,8 @@
 import "./index.css";
 import io from "socket.io-client";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Chat from "./Chat";
+import { UserLoginContext } from "./UserContext";
 
 const socket = io.connect("http://localhost:3001");
 
@@ -9,6 +10,8 @@ function App() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [toggle, setToggle] = useState(true);
+
+  const { setUserLogin } = useContext(UserLoginContext);
 
   const joinRoom = () => {
     if (username !== "" && room !== "") {
@@ -18,6 +21,7 @@ function App() {
       };
       socket.emit("join_room", userData);
       setToggle(false);
+      setUserLogin(userData.author);
     }
   };
 
