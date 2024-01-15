@@ -8,21 +8,24 @@ const socket = io.connect("http://localhost:3001");
 function App() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
+  const [toggle, setToggle] = useState(true);
 
   const joinRoom = () => {
     if (username !== "" && room !== "") {
       socket.emit("join_room", room);
+      setToggle(false);
     }
   };
 
-  return (
-    <div className="flex flex-col  items-center bg-cyan-700 h-screen p-60">
-      <div className=" flex flex-col gap-3 bg-white p-10">
+  return toggle ? (
+    <div className="flex flex-col font-mono items-center bg-cyan-700 h-screen p-60">
+      <div className=" flex flex-col gap-3 bg-white p-10 rounded-2xl">
         <div className=" p-4">
-          <h3 className=" text-3xl">Join A Chat</h3>
+          <h3 className=" text-3xl">SOCKET.IO Chat</h3>
         </div>
         <div className=" border shadow-md">
           <input
+            className="w-full p-0.5"
             type="text"
             placeholder="Type your username"
             onChange={(event) => {
@@ -32,6 +35,7 @@ function App() {
         </div>
         <div className=" border shadow-md">
           <input
+            className="w-full p-0.5"
             type="text"
             placeholder="Type your room ID"
             onChange={(event) => {
@@ -45,9 +49,10 @@ function App() {
         >
           Join a room
         </button>
-        <Chat socket={socket} username={username} room={room} />
       </div>
     </div>
+  ) : (
+    <Chat socket={socket} username={username} room={room} />
   );
 }
 
