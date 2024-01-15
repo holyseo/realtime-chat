@@ -1,5 +1,6 @@
 import "./index.css";
 import React, { useEffect, useState } from "react";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
@@ -19,6 +20,7 @@ function Chat({ socket, username, room }) {
       await socket.emit("send_message", messageData);
       setMessageList((currList) => [...currList, messageData]);
     }
+    setCurrentMessage("");
   };
 
   useEffect(() => {
@@ -29,21 +31,36 @@ function Chat({ socket, username, room }) {
 
   return (
     <div className="flex flex-col items-center bg-cyan-800 h-screen font-mono py-60 ">
-      <div className=" flex flex-col gap-3 bg-slate-200 px-3 pt-5 rounded-2xl w-96 ">
-        <div className="text-2xl text-center font-semibold mb-5">
-          <p>Live Chat</p>
+      <div className=" flex flex-col gap-3 bg-slate-50 px-3 pt-5 rounded-2xl w-96 ">
+        <div className="text-xl text-center font-semibold mb-5">
+          <p>{}</p>
         </div>
-        <div className=" overflow-y-auto h-72 border-gray-300 bg-white border-2 shadow-md rounded-md p-3">
+        <ScrollToBottom className=" flex flex-col end overflow-y-auto h-72 border-gray-300 bg-white border-2 shadow-md rounded-md p-2">
           {messageList.map((messageContent, index) =>
             messageContent.author !== username ? (
-              <p key={index}>{messageContent.message}</p>
+              <div key={index} className="mr-auto flex flex-col">
+                <span className=" bg-gray-100 rounded-3xl px-5 py-1 max-w-56 mt-5 break-words">
+                  {messageContent.message}
+                </span>
+                <span className=" pl-1 mt-1 text-xs mr-auto">
+                  {messageContent.time}
+                </span>
+              </div>
             ) : (
-              <p key={index} className=" text-right ">
-                {messageContent.message}
-              </p>
+              <div key={index} className="ml-auto flex flex-col pr-2">
+                <span
+                  key={index}
+                  className=" bg-blue-300 rounded-3xl px-5 py-1 max-w-56 mt-5 text-right ml-auto break-words"
+                >
+                  {messageContent.message}
+                </span>
+                <span className=" pl-1 mt-1 text-xs ml-auto">
+                  {messageContent.time}
+                </span>
+              </div>
             )
           )}
-        </div>
+        </ScrollToBottom>
         <div className="flex mb-3 justify-between border-gray-600 border-2 rounded-md mt-5 p-1">
           <div className="flex-1 ">
             <input
@@ -53,6 +70,9 @@ function Chat({ socket, username, room }) {
               placeholder="Type your message"
               onChange={(event) => {
                 setCurrentMessage(event.target.value);
+              }}
+              onKeyDown={(event) => {
+                event.key === "Enter" && sendMessage();
               }}
             />
           </div>
