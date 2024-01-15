@@ -12,7 +12,11 @@ function App() {
 
   const joinRoom = () => {
     if (username !== "" && room !== "") {
-      socket.emit("join_room", room);
+      const userData = {
+        author: username,
+        room,
+      };
+      socket.emit("join_room", userData);
       setToggle(false);
     }
   };

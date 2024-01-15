@@ -5,6 +5,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const [party, setParty] = useState("");
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -25,15 +26,28 @@ function Chat({ socket, username, room }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      setMessageList((currList) => [...currList, data]);
+      setMessageList((currList) => {
+        return [...currList, data];
+      });
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      console.log(data.author);
+      setParty(data.author);
     });
   }, [socket]);
 
   return (
     <div className="flex flex-col items-center bg-cyan-800 h-screen font-mono py-60 ">
       <div className=" flex flex-col gap-3 bg-slate-50 px-3 pt-5 rounded-2xl w-96 ">
-        <div className="text-xl text-center font-semibold mb-5">
-          <p>{}</p>
+        <div className="text-lg text-center font-semibold mb-5">
+          {!party ? (
+            <p>You are the only one in this chat.</p>
+          ) : (
+            <p>Chat with: {party}</p>
+          )}
         </div>
         <ScrollToBottom className=" flex flex-col end overflow-y-auto h-72 border-gray-300 bg-white border-2 shadow-md rounded-md p-2">
           {messageList.map((messageContent, index) =>
