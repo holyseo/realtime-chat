@@ -17,12 +17,13 @@ function Chat({ socket, username, room }) {
           new Date(Date.now()).getMinutes(),
       };
       await socket.emit("send_message", messageData);
+      setMessageList((currList) => [...currList, messageData]);
     }
   };
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      setMessageList((currList) => [...currList, data.message]);
+      setMessageList((currList) => [...currList, data]);
     });
   }, [socket]);
 
@@ -33,9 +34,15 @@ function Chat({ socket, username, room }) {
           <p>Live Chat</p>
         </div>
         <div className=" overflow-y-auto h-72 border-gray-300 bg-white border-2 shadow-md rounded-md p-3">
-          {messageList.map((message, index) => (
-            <p key={index}>{message}</p>
-          ))}
+          {messageList.map((messageContent, index) =>
+            messageContent.author !== username ? (
+              <p key={index}>{messageContent.message}</p>
+            ) : (
+              <p key={index} className=" text-right ">
+                {messageContent.message}
+              </p>
+            )
+          )}
         </div>
         <div className="flex mb-3 justify-between border-gray-600 border-2 rounded-md mt-5 p-1">
           <div className="flex-1 ">
