@@ -39,3 +39,8 @@ A real-time chat application built using Socket.io, React, and Tailwind CSS.
 
 ## Screenshots
 
+![image](https://github.com/holyseo/realtime-chat/assets/128103221/1b95929e-b16f-4868-a74b-1a41b31216f6)
+
+![image](https://github.com/holyseo/realtime-chat/assets/128103221/b5b54c8b-5729-428e-90b9-e277305cee92)
+
+![image](https://github.com/holyseo/realtime-chat/assets/128103221/c9b0fbcd-e0e3-4d54-bd50-1bd235e08f4f)
