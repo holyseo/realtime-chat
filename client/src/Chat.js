@@ -56,7 +56,7 @@ function Chat({ socket, username, room }) {
           {messageList.map((messageContent, index) =>
             messageContent.author !== username ? (
               <div key={index} className="mr-auto flex flex-col">
-                <span className=" bg-gray-100 rounded-3xl px-5 py-1 max-w-56 mt-5 break-words">
+                <span className=" bg-gray-100 rounded-3xl px-5 py-1 max-w-56 mt-5 mr-auto break-words">
                   {messageContent.message}
                 </span>
                 <span className=" pl-1 mt-1 text-xs mr-auto">
